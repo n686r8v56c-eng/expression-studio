@@ -138,6 +138,7 @@ export default function StudyPracticeBookmark({bookmark,skills=[],history=[],onS
     </div>)}
     {!markers.length&&<small>영상의 현재 시점을 찍거나 북마크 목록에서 목차를 일괄 등록할 수 있어.</small>}
    </div>
+   <label className="expression-study-url-field">유튜브 링크<input type="url" inputMode="url" aria-label="유튜브 링크" placeholder="https://youtu.be/..." value={draft.url||''} onChange={e=>set(old=>({...old,url:e.target.value.trim()}))} autoCapitalize="off" autoCorrect="off" spellCheck={false}/></label>
    <button className="muscle-study-save" type="button" disabled={busy} onClick={save}><Check size={15}/> 저장</button>
   </>:<>
    {selected&&<section className="muscle-study-selected"><b>{selected.label||'타임마커'} · {selected.start}</b>{skill&&<small>연결 기술 · {skill.name}</small>}<p>{selected.memo||selected.caution||'작성된 메모가 없어.'}</p></section>}
