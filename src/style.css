@@ -7,3 +7,21 @@
 .tech-video-shell{width:100%;aspect-ratio:16/9;background:#211b27;overflow:hidden;border-radius:9px;position:relative}.tech-video{width:100%;height:100%}.tech-video iframe{width:100%!important;height:100%!important}.tech-no-video{display:grid;place-items:center;font-size:12px;color:white}.tech-video-shell.zoom iframe{transform:scale(1.22);transform-origin:center}.tech-caution{position:absolute;bottom:4px;left:4px;right:4px;pointer-events:none;background:#271a2bcb;color:white;padding:8px;border-radius:7px;display:grid;gap:3px;font-size:12px}.tech-clip-tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding-bottom:5px}.tech-clip-tabs button{flex:none;border:1px solid #e6dbed;background:#faf7fc;border-radius:8px;padding:7px 10px;font-size:12px;text-align:left}.tech-clip-tabs small{display:block;font-size:10px;color:#92829c;margin-top:2px}.tech-fields{display:grid;gap:10px;padding:9px;background:#f9f6fc;border:1px solid #eee5f5;border-radius:9px}.tech-fields .secondary{padding:8px;font-size:11px}.tech-fields label{min-width:0}.tech-external{color:#78569e;display:inline-flex;align-items:center;gap:6px;font-size:12px}.tech-history-list{display:grid;gap:7px}.tech-history{padding:8px;border-radius:8px;background:#f7f3fa}.tech-history small{display:block;color:#91819e;font-size:11px}.tech-history p{font-size:12px;margin:5px 0;white-space:pre-wrap}
 .tech-note-filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:6px 0 9px}.tech-note-filters select{font-size:12px}.tech-note-head{margin:12px 0 7px}.tech-note-entry{display:flex;gap:10px;padding:10px 3px;border-bottom:1px solid #eee7f4;background:white}.tech-note-entry>img{width:49px;height:49px;border-radius:7px;object-fit:cover}.tech-note-body{min-width:0;flex:1}.tech-note-body>b{display:block;font-size:13px}.tech-note-body>small{display:block;color:#91839a;font-size:11px;margin-top:3px}.tech-note-copy{display:flex;align-items:flex-start;gap:7px;justify-content:space-between}.tech-note-copy p{min-width:0;margin:7px 0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}.tech-note-copy button{flex:none;margin-top:6px}
 @media(max-width:420px){.tech-status{min-width:85px;max-width:95px;font-size:10px}.line{gap:5px;padding:7px 6px;min-height:48px}.line .icon{padding:5px}.thumb{width:34px;height:34px}.tech-photo-gallery{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+
+/* Dance Flow technique-editor sheet: preserve Expression genre guides */
+.veil:has(.skill-editor-modal){display:flex;align-items:flex-end;justify-content:center;padding:0;overflow:hidden;background:#1e13264c}
+.skill-editor-modal{width:100%;max-width:560px;max-height:min(91dvh,850px);background:#fff;border-radius:17px 17px 0 0;display:flex;flex-direction:column;overflow-y:auto;overscroll-behavior:contain;box-shadow:0 -8px 45px #26133328;padding:0 14px max(20px,env(safe-area-inset-bottom))}
+.skill-editor-modal .modalhead{position:sticky;top:0;background:white;z-index:2;min-height:50px;flex-shrink:0;margin:0 -14px 12px;padding:0 14px;border-bottom:1px solid #f0edf3}
+.skill-editor-modal .modalhead b{font-size:15px}
+.skill-editor-modal .form{display:flex;flex-direction:column;gap:12px;min-width:0}
+.skill-editor-modal .form>label{display:flex;flex-direction:column;gap:5px;min-width:0;color:#887c93;font-size:11px;font-weight:650}
+.skill-editor-modal .form input,.skill-editor-modal .form select{font-size:16px;min-height:42px}
+.skill-editor-modal .two label{color:#887c93;font-size:11px;font-weight:650}
+.skill-editor-modal .row-between{margin:0}
+.skill-editor-modal .row-between>b{font-size:12px}
+.skill-editor-modal .tech-photo-header strong{font-size:13px}
+.skill-editor-modal .formbuttons{display:flex;flex-direction:column;gap:8px;margin-top:3px}
+.skill-editor-modal .formbuttons .primary{width:100%;min-height:42px;font-size:14px;background:#8565b6}
+.skill-editor-modal .formbuttons .secondary{width:100%}
+@media(min-width:750px){.veil:has(.skill-editor-modal){align-items:center;padding:20px}.skill-editor-modal{border-radius:15px;max-height:86dvh}.skill-editor-modal .form input,.skill-editor-modal .form select{font-size:13px}}
