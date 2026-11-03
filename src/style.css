@@ -185,3 +185,273 @@ body,#root{width:100%;max-width:100%;min-width:0;overflow-x:clip}
 .expression-bulk-footer small,.expression-bulk-import>small{font-size:11px;color:#847593}
 .expression-bulk-footer button{display:inline-flex;align-items:center;gap:5px;border:0;background:#845faf;color:#fff;font-size:12px;font-weight:700;padding:8px 11px;border-radius:8px}
 .expression-bulk-footer button:disabled{opacity:.5}
+
+
+/* Readable phone typography; retain desktop sizes and existing layout. */
+@media (max-width: 749px) {
+    label {
+        font-size: 15px !important
+    }
+    .brand small {
+        font-size: 13px !important
+    }
+    .headtools select {
+        font-size: 15px !important
+    }
+    .bottom button {
+        font-size: 14px !important
+    }
+    .metrics span,.panel p {
+        font-size: 15px !important
+    }
+    .panel>b {
+        font-size: 16px !important
+    }
+    .primary {
+        font-size: 15px !important
+    }
+    .secondary {
+        font-size: 15px !important
+    }
+    .tabs button {
+        font-size: 15px !important
+    }
+    .search input {
+        font-size: 16px !important
+    }
+    .filters select {
+        font-size: 15px !important
+    }
+    .line-main b {
+        font-size: 16px !important
+    }
+    .line small {
+        font-size: 14px !important
+    }
+    .empty {
+        font-size: 15px !important
+    }
+    .guide p {
+        font-size: 15px !important
+    }
+    .guide b {
+        font-size: 15px !important
+    }
+    .chip {
+        font-size: 14px !important
+    }
+    .upload input {
+        font-size: 14px !important
+    }
+    .tech-status {
+        font-size: 14px !important
+    }
+    .tech-photo-header strong,.tech-clip-head b,.tech-note-head b {
+        font-size: 16px !important
+    }
+    .tech-muted {
+        font-size: 14px !important
+    }
+    .tech-modes button {
+        font-size: 15px !important
+    }
+    .tech-no-video {
+        font-size: 15px !important
+    }
+    .tech-caution {
+        font-size: 15px !important
+    }
+    .tech-clip-tabs button {
+        font-size: 15px !important
+    }
+    .tech-clip-tabs small {
+        font-size: 13px !important
+    }
+    .tech-fields .secondary {
+        font-size: 14px !important
+    }
+    .tech-external {
+        font-size: 15px !important
+    }
+    .tech-history small {
+        font-size: 14px !important
+    }
+    .tech-history p {
+        font-size: 15px !important
+    }
+    .tech-note-filters select {
+        font-size: 15px !important
+    }
+    .tech-note-body>b {
+        font-size: 16px !important
+    }
+    .tech-note-body>small {
+        font-size: 14px !important
+    }
+    .tech-note-copy p {
+        font-size: 15px !important
+    }
+    @media (max-width:420px) {
+        .tech-status {
+            font-size: 13px !important
+        }
+    }
+    .skill-editor-modal .form>label {
+        font-size: 14px !important
+    }
+    .skill-editor-modal .two label {
+        font-size: 14px !important
+    }
+    .skill-editor-modal .row-between>b {
+        font-size: 15px !important
+    }
+    .skill-editor-modal .tech-photo-header strong {
+        font-size: 16px !important
+    }
+    .skill-editor-modal .formbuttons .primary {
+        font-size: 16px !important
+    }
+    @media (min-width:750px) {
+        .skill-editor-modal .form input,.skill-editor-modal .form select {
+            font-size: 16px !important
+        }
+    }
+    .skill-editor-modal .tech-move-cautions>strong,
+.skill-editor-modal .tech-move-history>strong {
+        font-size: 16px !important
+    }
+    .skill-editor-modal .tech-move-caution-entry small,
+.skill-editor-modal .tech-move-history-entry small,
+.skill-editor-modal .tech-last-evaluation {
+        font-size: 14px !important
+    }
+    .skill-editor-modal .tech-move-caution-entry p,
+.skill-editor-modal .tech-move-history-entry p {
+        font-size: 16px !important
+    }
+    .skill-editor-modal .tech-last-evaluation {
+        font-size: 14px !important
+    }
+    .bookmark-editor-modal .tech-modes button {
+        font-size: 15px !important
+    }
+    .bookmark-editor-modal .tech-zoom-bar button {
+        font-size: 15px !important
+    }
+    .bookmark-editor-modal .tech-zoom-bar small {
+        font-size: 13px !important
+    }
+    .bookmark-editor-modal .tech-clip-head b {
+        font-size: 15px !important
+    }
+    .bookmark-editor-modal .tech-clip-head button {
+        font-size: 14px !important
+    }
+    .bookmark-editor-modal .tech-clip-tabs button {
+        font-size: 14px !important
+    }
+    .bookmark-editor-modal .tech-clip-tabs small {
+        font-size: 13px !important
+    }
+    .bookmark-editor-modal .tech-fields label {
+        font-size: 14px !important
+    }
+    .bookmark-editor-modal .two button {
+        font-size: 14px !important
+    }
+    .bookmark-editor-modal .tech-bookmark>.secondary:last-child {
+        font-size: 15px !important
+    }
+    .bookmark-editor-modal .tech-external {
+        font-size: 15px !important
+    }
+    @media (min-width:750px) {
+        .bookmark-editor-modal .tech-fields input,.bookmark-editor-modal .tech-fields select,.bookmark-editor-modal .tech-fields textarea {
+            font-size: 16px !important
+        }
+    }
+    @media (max-width:480px) {
+        .brand {
+            font-size: 16px !important
+        }
+    }
+    @media (max-width:480px) {
+        .brand small {
+            font-size: 13px !important
+        }
+    }
+    @media (max-width:480px) {
+        .headtools select {
+            font-size: 15px !important
+        }
+    }
+    @media (max-width:360px) {
+        .brand {
+            font-size: 15px !important
+        }
+    }
+    .brand {
+        font-size: 16px !important
+    }
+    .brand small {
+        font-size: 13px !important
+    }
+    .headtools select {
+        font-size: 15px !important
+    }
+    @media (max-width:480px) {
+        .brand {
+            font-size: 16px !important
+        }
+    }
+    @media (max-width:480px) {
+        .brand small {
+            font-size: 13px !important
+        }
+    }
+    .bookmark-editor-modal .tech-skill-search>label {
+        font-size: 14px !important
+    }
+    .bookmark-editor-modal .tech-skill-search-results button {
+        font-size: 15px !important
+    }
+    .bookmark-editor-modal .tech-skill-search-results button small {
+        font-size: 13px !important
+    }
+    .bookmark-editor-modal .tech-skill-search-results p {
+        font-size: 15px !important
+    }
+    .tech-note-head>.tech-note-copy-all {
+        font-size: 14px !important
+    }
+    .tech-copy-status {
+        font-size: 14px !important
+    }
+    .studio-storage-usage {
+        font-size: 15px !important
+    }
+    .studio-storage-usage small {
+        font-size: 14px !important
+    }
+    .linked-bookmark-btn {
+        font-size: 14px !important
+    }
+    .linked-bookmark-filter {
+        font-size: 14px !important
+    }
+    .linked-bookmark-filter button {
+        font-size: 14px !important
+    }
+    .expression-bulk-import>b {
+        font-size: 15px !important
+    }
+    .expression-bulk-import textarea {
+        font-size: 15px !important
+    }
+    .expression-bulk-footer small,.expression-bulk-import>small {
+        font-size: 14px !important
+    }
+    .expression-bulk-footer button {
+        font-size: 15px !important
+    }
+}
