@@ -77,3 +77,29 @@
 .bookmark-editor-modal .tech-external{font-size:12px}
 @media(min-width:700px){.bookmark-editor-modal .tech-video-shell{width:min(100%,640px);margin-inline:auto;align-self:center}}
 @media(min-width:750px){.veil:has(.bookmark-editor-modal){align-items:center;padding:20px}.bookmark-editor-modal{border-radius:15px;max-height:86dvh}.bookmark-editor-modal .tech-fields input,.bookmark-editor-modal .tech-fields select,.bookmark-editor-modal .tech-fields textarea{font-size:13px!important}}
+
+
+/* iOS Safari: prevent automatic focus zoom and horizontal viewport expansion.
+   Scope all edit surfaces (skill, bookmark, free notes, genre settings) and tab filters. */
+html{width:100%;max-width:100%;overflow-x:clip;-webkit-text-size-adjust:100%}
+body,#root{width:100%;max-width:100%;min-width:0;overflow-x:clip}
+.top,main,.headtools,.section,.tabs,.filters,.list,.search,.metrics,.line,.guide,.chips{min-width:0;max-width:100%}
+.top .brand{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.headtools{flex-shrink:0}
+.veil{width:100%;max-width:100vw;min-width:0;overflow-x:clip}
+.modal,.skill-editor-modal,.bookmark-editor-modal{box-sizing:border-box;width:100%;max-width:min(560px,100vw);min-width:0;overflow-x:clip}
+.modal .form,.modal .two,.modal .tech-bookmark,.modal .tech-fields,.modal .tech-note-filters,.modal .tech-photos,.modal .tech-photo-gallery,.modal .tech-clip-head,.modal .tech-zoom-bar,.modal .tech-modes,.modal .guide,.modal .chips{min-width:0;max-width:100%}
+.modal .two,.tech-note-filters{grid-template-columns:repeat(2,minmax(0,1fr))}
+.modal label,.modal .form>label,.modal .two>label,.modal .tech-fields>label{min-width:0;max-width:100%}
+.modal input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),.modal select,.modal textarea,.search input,.filters select,.tech-note-filters select,.tech-note-filters input,.tech-status,.headtools select,.auth input{box-sizing:border-box;min-width:0;max-width:100%;font-size:16px!important}
+.modal input,.modal textarea{overflow-wrap:anywhere}
+.modal .tech-clip-tabs{max-width:100%;min-width:0;overflow-x:auto}
+.modal .tech-video-shell,.modal .tech-video{max-width:100%;min-width:0}
+.modal .tech-video iframe,.modal .video{display:block;max-width:100%}
+.modal .tech-photo-card,.modal .tech-photo-card img{min-width:0;max-width:100%}
+@media(max-width:420px){
+  .top{padding-left:12px;padding-right:12px}
+  .brand{font-size:16px;max-width:calc(100vw - 194px)}
+  .headtools select{max-width:130px}
+  .modal .two{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
