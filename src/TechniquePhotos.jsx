@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
 import{Upload,Star,Trash2}from'lucide-react';
 export const skillPhotos=s=>Array.isArray(s.images)?s.images:(s.image?[{id:'legacy',url:s.image,primary:true}]:[]);
-export const primaryPhoto=s=>skillPhotos(s).find(x=>x.primary)?.url||skillPhotos(s)[0]?.url||s.image||'';
+export const primaryPhoto=s=>skillPhotos(s).find(x=>x.primary)?.url||skillPhotos(s)[0]?.url||'';
 const resize=async file=>new Promise((resolve,reject)=>{const image=new Image(),url=URL.createObjectURL(file);image.onload=()=>{const scale=Math.min(1,1200/Math.max(image.width,image.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(image.width*scale));c.height=Math.max(1,Math.round(image.height*scale));c.getContext('2d').drawImage(image,0,0,c.width,c.height);URL.revokeObjectURL(url);resolve(c.toDataURL('image/jpeg',.76))};image.onerror=()=>{URL.revokeObjectURL(url);reject(Error('사진을 읽을 수 없어.'))};image.src=url});
 export default function TechniquePhotos({item,onChange}){const[busy,B]=useState(false),photos=skillPhotos(item);
 const add=async e=>{const files=Array.from(e.target.files||[]);e.target.value='';if(!files.length)return;B(true);try{const added=[];for(const file of files){if(!file.type.startsWith('image/'))continue;if(file.size>10*1024*1024){alert('사진은 장당 10MB 이하로 선택해 줘.');continue}const url=await resize(file);added.push({id:crypto.randomUUID(),url,primary:!photos.length&&!added.length})}onChange([...photos,...added])}catch(err){alert(err.message)}finally{B(false)}};
