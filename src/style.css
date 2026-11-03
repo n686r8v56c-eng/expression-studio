@@ -125,3 +125,21 @@ body,#root{width:100%;max-width:100%;min-width:0;overflow-x:clip}
  .research-fields{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:360px){.brand{font-size:12px}.brand small{display:none}.headtools select{width:77px}.headtools select:first-child{width:61px}}
+
+
+/* Compact header only: preserve all editor input styling */
+.top{gap:5px}
+.brand{font-size:14px;flex:1 1 auto;min-width:0;max-width:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brand small{font-size:9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.headtools{flex:0 0 auto;max-width:none;min-width:0;gap:4px}
+.headtools select{box-sizing:border-box!important;flex:none!important;width:94px!important;max-width:94px!important;font-size:12px!important;padding:5px 6px!important;height:32px!important;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+.headtools select:first-child{width:69px!important;max-width:69px!important}
+.headtools .icon{width:30px;height:32px;padding:4px}
+@media(max-width:480px){
+ .top{padding-left:10px;padding-right:10px;gap:4px}
+ .brand{font-size:13px}
+ .brand small{font-size:8px}
+ .headtools{gap:3px}
+ .headtools select{width:91px!important;max-width:91px!important}
+ .headtools select:first-child{width:67px!important;max-width:67px!important}
+}
