@@ -40,3 +40,40 @@
 .skill-editor-modal .tech-move-history-entry p{font-size:13px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;margin:0;color:#322a3b}
 .skill-editor-modal .tech-last-evaluation{margin:0;font-size:11px}
 .skill-editor-modal .tech-move-history-entry+.tech-move-history-entry{padding-top:9px;border-top:1px solid #eae1f1}
+
+
+/* Bookmark editing surface matches the Dance Flow bookmark studio */
+.veil:has(.bookmark-editor-modal){display:flex;align-items:flex-end;justify-content:center;padding:0;overflow:hidden;background:#1e13264c}
+.bookmark-editor-modal{width:100%;max-width:560px;max-height:min(91dvh,850px);background:white;border-radius:17px 17px 0 0;box-shadow:0 -8px 45px #26133328;display:flex;flex-direction:column;overflow-y:auto;overscroll-behavior:contain;padding:0 14px max(20px,env(safe-area-inset-bottom));min-width:0}
+.bookmark-editor-modal .modalhead{position:sticky;top:0;background:white;z-index:3;height:50px;min-height:50px;flex-shrink:0;margin:0 -14px 12px;padding:0 14px;border-bottom:1px solid #f0edf3}
+.bookmark-editor-modal .modalhead b{font-size:15px}
+.bookmark-editor-modal .dance-bookmark-layout{display:flex;flex-direction:column;gap:10px;min-width:0}
+.bookmark-editor-modal .tech-modes{display:flex;background:#eee8f4;padding:4px;border-radius:9px;gap:4px}
+.bookmark-editor-modal .tech-modes button{border:0;background:transparent;border-radius:7px;flex:1;padding:9px;font-size:12px}
+.bookmark-editor-modal .tech-modes button.selected{background:white;color:#7552a7;font-weight:700}
+.bookmark-editor-modal .tech-video-shell{width:100%;aspect-ratio:16/9;background:#191720;border-radius:9px;overflow:hidden;min-width:0}
+.bookmark-editor-modal .tech-video{width:100%;height:100%;border-radius:9px;overflow:hidden}
+.bookmark-editor-modal .tech-video iframe{width:100%!important;height:100%!important;border:0!important}
+.bookmark-editor-modal .tech-video-shell.zoom .tech-video iframe{transform:scale(1.45);transform-origin:center}
+.bookmark-editor-modal .tech-zoom-bar{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:-3px}
+.bookmark-editor-modal .tech-zoom-bar button{background:#eee8f5;color:#7252a2;border:0;border-radius:7px;padding:7px 13px;font-size:12px;font-weight:650}
+.bookmark-editor-modal .tech-zoom-bar button.active{background:#dcd0ef;color:#624292}
+.bookmark-editor-modal .tech-zoom-bar small{font-size:10px;color:#91859e}
+.bookmark-editor-modal .tech-clip-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.bookmark-editor-modal .tech-clip-head b{font-size:12px}
+.bookmark-editor-modal .tech-clip-head button{background:#eee7f6;border:0;color:#7654a1;font-size:11px;border-radius:7px;padding:7px}
+.bookmark-editor-modal .tech-clip-tabs{display:flex;overflow-x:auto;gap:6px;padding:0 0 3px}
+.bookmark-editor-modal .tech-clip-tabs button{flex:none;border:1px solid #eee7f5;background:#faf8fc;border-radius:8px;padding:7px;display:flex;flex-direction:column;gap:3px;font-size:11px;box-shadow:none}
+.bookmark-editor-modal .tech-clip-tabs button.selected{background:#e5d7f4;color:#65409a;box-shadow:none}
+.bookmark-editor-modal .tech-clip-tabs small{font-size:10px;color:#9a8ca6}
+.bookmark-editor-modal .tech-fields{display:flex;flex-direction:column;gap:9px;min-width:0;padding:0;background:none;border:0;border-radius:0}
+.bookmark-editor-modal .tech-fields label{font-size:11px;color:#857592;display:flex;flex-direction:column;gap:5px;min-width:0}
+.bookmark-editor-modal .tech-fields input,.bookmark-editor-modal .tech-fields select,.bookmark-editor-modal .tech-fields textarea{font-size:16px!important;min-height:42px}
+.bookmark-editor-modal .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.bookmark-editor-modal .two button{display:flex;align-items:center;justify-content:center;gap:5px;min-height:32px;padding:7px 4px;background:#eee8f5;border:0;border-radius:7px;color:#7856a3;font-size:11px}
+.bookmark-editor-modal .tech-fields>button.secondary{border:0;background:transparent;color:#a55c86;min-height:28px}
+.bookmark-editor-modal .tech-bookmark-save{min-height:39px;width:100%;padding:11px;background:#8565b6;color:white;font-weight:650;border-radius:9px}
+.bookmark-editor-modal .tech-bookmark>.secondary:last-child{background:transparent;border:0;color:#7654a1;padding:10px;font-size:12px}
+.bookmark-editor-modal .tech-external{font-size:12px}
+@media(min-width:700px){.bookmark-editor-modal .tech-video-shell{width:min(100%,640px);margin-inline:auto;align-self:center}}
+@media(min-width:750px){.veil:has(.bookmark-editor-modal){align-items:center;padding:20px}.bookmark-editor-modal{border-radius:15px;max-height:86dvh}.bookmark-editor-modal .tech-fields input,.bookmark-editor-modal .tech-fields select,.bookmark-editor-modal .tech-fields textarea{font-size:13px!important}}
