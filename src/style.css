@@ -155,3 +155,13 @@ body,#root{width:100%;max-width:100%;min-width:0;overflow-x:clip}
 .bookmark-editor-modal .tech-skill-search-results button span{flex:1;min-width:0;overflow-wrap:anywhere}
 .bookmark-editor-modal .tech-skill-search-results button small{font-size:10px;max-width:45%;color:#9686a5;text-align:right}
 .bookmark-editor-modal .tech-skill-search-results p{padding:10px;margin:0;font-size:12px;color:#9686a5}
+
+
+/* Sing Flow-style learning notes */
+.tech-note-head>.tech-note-copy-all{display:inline-flex;align-items:center;justify-content:center;gap:5px;background:#e7daf4;color:#684993;font-size:11px;font-weight:700;border:0;border-radius:8px;padding:8px 10px}
+.tech-note-head>.tech-note-copy-all:disabled{opacity:.5}
+.tech-copy-status{display:block;font-size:11px;color:#7654a1;margin:4px 0 9px}
+.tech-note-copy{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.tech-note-copy p{flex:1;min-width:0;overflow-wrap:anywhere}
+.tech-note-youtube{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:8px;padding:0;background:#eee8f5;color:#7856a3;text-decoration:none;margin-top:6px}
+.tech-note-entry>img{width:58px;height:58px;aspect-ratio:1;object-fit:cover}
