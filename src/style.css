@@ -25,3 +25,18 @@
 .skill-editor-modal .formbuttons .primary{width:100%;min-height:42px;font-size:14px;background:#8565b6}
 .skill-editor-modal .formbuttons .secondary{width:100%}
 @media(min-width:750px){.veil:has(.skill-editor-modal){align-items:center;padding:20px}.skill-editor-modal{border-radius:15px;max-height:86dvh}.skill-editor-modal .form input,.skill-editor-modal .form select{font-size:13px}}
+
+/* Match Dance Flow's move editor: linked cautions and accumulated evaluations */
+.skill-editor-modal .tech-move-cautions,
+.skill-editor-modal .tech-move-history{display:flex;flex-direction:column;gap:12px;background:#f7f4fa;border-radius:12px;padding:13px 12px;min-width:0}
+.skill-editor-modal .tech-move-cautions>strong,
+.skill-editor-modal .tech-move-history>strong{font-size:13px;font-weight:750;color:#332b3d}
+.skill-editor-modal .tech-move-caution-entry,
+.skill-editor-modal .tech-move-history-entry{display:grid;gap:7px;min-width:0}
+.skill-editor-modal .tech-move-caution-entry small,
+.skill-editor-modal .tech-move-history-entry small,
+.skill-editor-modal .tech-last-evaluation{font-size:11px;line-height:1.5;color:#9a8ba6}
+.skill-editor-modal .tech-move-caution-entry p,
+.skill-editor-modal .tech-move-history-entry p{font-size:13px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;margin:0;color:#322a3b}
+.skill-editor-modal .tech-last-evaluation{margin:0;font-size:11px}
+.skill-editor-modal .tech-move-history-entry+.tech-move-history-entry{padding-top:9px;border-top:1px solid #eae1f1}
