@@ -143,3 +143,15 @@ body,#root{width:100%;max-width:100%;min-width:0;overflow-x:clip}
  .headtools select{width:91px!important;max-width:91px!important}
  .headtools select:first-child{width:67px!important;max-width:67px!important}
 }
+
+/* Search picker for bookmark clips; same controls as Sing Flow */
+.bookmark-editor-modal .tech-skill-search{display:flex;flex-direction:column;gap:5px;min-width:0}
+.bookmark-editor-modal .tech-skill-search>label{color:#857592;font-size:11px}
+.bookmark-editor-modal .tech-skill-search>input{min-width:0;max-width:100%;width:100%;min-height:42px;font-size:16px!important}
+.bookmark-editor-modal .tech-skill-search-results{max-height:218px;overflow-y:auto;overscroll-behavior:contain;border:1px solid #e6dbef;border-radius:9px;background:white;display:flex;flex-direction:column}
+.bookmark-editor-modal .tech-skill-search-results button{display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left;background:white;border:0;border-bottom:1px solid #f0ebf4;padding:10px;font-size:12px;color:#332940}
+.bookmark-editor-modal .tech-skill-search-results button:last-child{border-bottom:0}
+.bookmark-editor-modal .tech-skill-search-results button.active,.bookmark-editor-modal .tech-skill-search-results button[aria-selected="true"]{background:#f4eefb}
+.bookmark-editor-modal .tech-skill-search-results button span{flex:1;min-width:0;overflow-wrap:anywhere}
+.bookmark-editor-modal .tech-skill-search-results button small{font-size:10px;max-width:45%;color:#9686a5;text-align:right}
+.bookmark-editor-modal .tech-skill-search-results p{padding:10px;margin:0;font-size:12px;color:#9686a5}
