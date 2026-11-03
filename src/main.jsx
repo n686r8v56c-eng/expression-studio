@@ -38,12 +38,14 @@ const createStudySkill=name=>{
  return id;
 };
 const importBulkBookmarks=()=>{
- const lines=bulkText.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
- const urls=lines.filter(x=>/^https?:\/\/\S+$/i.test(x));
+ // Detect YouTube links wherever they appear in pasted text, regardless of line position.
+ const extracted=[...bulkText.matchAll(/https?:\/\/[^\s<>"']+/gi)].map(match=>match[0].replace(/[),.;!?\]}>]+$/g,''));
+ const urls=extracted.filter(link=>youtubeId(link));
+ if(extracted.length!==urls.length)return setBulkNotice('유튜브 이외의 URL이 포함되어 있어. 확인해 줘.');
  if(urls.length>1)return setBulkNotice('유튜브 URL은 하나만 넣어 줘.');
  const url=urls[0]||'';
- if(url&&!youtubeId(url))return setBulkNotice('유효한 유튜브 URL을 확인해 줘.');
- const {items,errors}=parseTimeMarkers(lines.filter(x=>x!==url).join('\n'));
+ const chapters=bulkText.replace(/https?:\/\/[^\s<>"']+/gi,' ').split(/\r?\n/).map(x=>x.trim()).filter(Boolean).join('\n');
+ const {items,errors}=parseTimeMarkers(chapters);
  if(errors.length)return setBulkNotice('목차 형식을 확인해 줘: '+errors.join(', ')+'번째 줄');
  if(!url&&!items.length)return setBulkNotice('영상 URL이나 타임스탬프를 입력해 줘.');
  if(items.some((x,i)=>i>0&&x.start<=items[i-1].start))return setBulkNotice('타임스탬프를 시간순으로 입력해 줘.');
