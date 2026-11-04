@@ -98,6 +98,29 @@ export default function StudyPracticeBookmark({bookmark,skills=[],history=[],onS
  const [draft,SetDraft]=useState(()=>({...bookmark,...(initial?.draft||{}),segments:Array.isArray(initial?.draft?.segments)?initial.draft.segments:(bookmark.segments||[]).map(s=>({...s}))}));
  const [mode,Mode]=useState('study'),[active,Active]=useState(0),[time,Time]=useState(0),[ready,Ready]=useState(false),[status,Status]=useState(''),[practiceNote,PracticeNote]=useState(''),[busy,Busy]=useState(false);
  const apiRef=useRef(null),saveRef=useRef(onAutoSave),changed=useRef(false);
+ const titleEdited=useRef(false),[titleNotice,TitleNotice]=useState('');
+ const videoKey=youtubeId(draft.url);
+ useEffect(()=>{
+  if(!videoKey){TitleNotice('');return}
+  const currentTitle=String(draft.title||'').trim();
+  const placeholder=!currentTitle||currentTitle==='유튜브 영상 · '+videoKey||currentTitle==='YouTube 영상'||currentTitle==='타임마커 노트';
+  if(titleEdited.current||!placeholder)return;
+  const controller=new AbortController();
+  const timer=setTimeout(async()=>{
+   TitleNotice('영상 제목 조회 중…');
+   try{
+    const response=await fetch('https://noembed.com/embed?url='+encodeURIComponent('https://www.youtube.com/watch?v='+videoKey),{signal:controller.signal});
+    if(!response.ok)throw Error('제목 조회 실패');
+    const data=await response.json();
+    if(!data.title||data.error)throw Error('제목 없음');
+    set(old=>youtubeId(old.url)===videoKey&&!titleEdited.current?{...old,title:String(data.title).trim()}:old);
+    TitleNotice('제목 자동 입력 완료 · 직접 수정 가능');
+   }catch(e){
+    if(e.name!=='AbortError')TitleNotice('제목을 자동으로 가져오지 못했어. 직접 입력해 줘.');
+   }
+  },450);
+  return()=>{clearTimeout(timer);controller.abort()};
+ },[videoKey]);
  const markers=draft.segments||[],selected=markers[Math.min(active,Math.max(0,markers.length-1))],skill=skills.find(x=>x.id===selected?.skillId);
  const historyForSkill=history.filter(h=>h.skillId===selected?.skillId).sort((a,b)=>new Date(b.at)-new Date(a.at));
  const set=value=>{changed.current=true;SetDraft(value)};
@@ -138,7 +161,13 @@ export default function StudyPracticeBookmark({bookmark,skills=[],history=[],onS
     </div>)}
     {!markers.length&&<small>영상의 현재 시점을 찍거나 북마크 목록에서 목차를 일괄 등록할 수 있어.</small>}
    </div>
-   <label className="expression-study-url-field">유튜브 링크<input type="url" inputMode="url" aria-label="유튜브 링크" placeholder="https://youtu.be/..." value={draft.url||''} onChange={e=>set(old=>({...old,url:e.target.value.trim()}))} autoCapitalize="off" autoCorrect="off" spellCheck={false}/></label>
+   <label className="expression-study-url-field">유튜브 링크<input type="url" inputMode="url" aria-label="유튜브 링크" placeholder="https://youtu.be/..." value={draft.url||''} onChange={e=>{
+     const nextUrl=e.target.value.trim();
+     if(youtubeId(nextUrl)!==youtubeId(draft.url)){titleEdited.current=false;TitleNotice('')}
+     set(old=>({...old,url:nextUrl,title:youtubeId(nextUrl)!==youtubeId(old.url)?'':old.title}));
+    }} autoCapitalize="off" autoCorrect="off" spellCheck={false}/></label>
+   <label className="expression-study-url-field">영상 제목<input type="text" aria-label="영상 제목" placeholder="유튜브 링크를 입력하면 제목을 자동으로 가져와" value={draft.title||''} onChange={e=>{titleEdited.current=true;set(old=>({...old,title:e.target.value}))}}/></label>
+   {titleNotice&&<small className="expression-study-title-notice" role="status">{titleNotice}</small>
    <button className="muscle-study-save" type="button" disabled={busy} onClick={save}><Check size={15}/> 저장</button>
   </>:<>
    {selected&&<section className="muscle-study-selected"><b>{selected.label||'타임마커'} · {selected.start}</b>{skill&&<small>연결 기술 · {skill.name}</small>}<p>{selected.memo||selected.caution||'작성된 메모가 없어.'}</p></section>}
