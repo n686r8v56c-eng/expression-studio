@@ -167,7 +167,7 @@ export default function StudyPracticeBookmark({bookmark,skills=[],history=[],onS
      set(old=>({...old,url:nextUrl,title:youtubeId(nextUrl)!==youtubeId(old.url)?'':old.title}));
     }} autoCapitalize="off" autoCorrect="off" spellCheck={false}/></label>
    <label className="expression-study-url-field">영상 제목<input type="text" aria-label="영상 제목" placeholder="유튜브 링크를 입력하면 제목을 자동으로 가져와" value={draft.title||''} onChange={e=>{titleEdited.current=true;set(old=>({...old,title:e.target.value}))}}/></label>
-   {titleNotice&&<small className="expression-study-title-notice" role="status">{titleNotice}</small>
+   {titleNotice&&<small className="expression-study-title-notice" role="status">{titleNotice}</small>}
    <button className="muscle-study-save" type="button" disabled={busy} onClick={save}><Check size={15}/> 저장</button>
   </>:<>
    {selected&&<section className="muscle-study-selected"><b>{selected.label||'타임마커'} · {selected.start}</b>{skill&&<small>연결 기술 · {skill.name}</small>}<p>{selected.memo||selected.caution||'작성된 메모가 없어.'}</p></section>}
