@@ -464,3 +464,21 @@ body,#root{width:100%;max-width:100%;min-width:0;overflow-x:clip}
 .genre-archive-section>.line .line-main{min-width:0;flex:1;font-size:13px}
 .genre-archive-section>.line button{display:inline-flex;gap:5px;align-items:center;justify-content:center;white-space:nowrap;font-size:12px}
 .genre-archive-section>small{color:#8b7e99;font-size:12px}
+
+
+/* Expression Studio authenticated entry screen */
+.expression-auth-screen{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:calc(20px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));background:#faf8fc}
+.expression-auth-card{width:min(100%,420px);display:grid;gap:12px;padding:24px 22px 26px;background:#fff;border:1px solid #e7ddf0;border-radius:18px;box-shadow:0 12px 32px rgba(91,58,124,.08)}
+.expression-auth-mark{width:48px;height:48px;display:grid;place-items:center;background:#f1eafa;border-radius:14px;color:#8562b1;font-size:26px}
+.expression-auth-card h1{margin:0;color:#6e4b9b;font-size:23px;letter-spacing:-.035em}
+.expression-auth-card>p{margin:0 0 5px;color:#9483a1;font-size:13px}
+.expression-auth-card h2{margin:8px 0 1px;color:#392d45;font-size:18px}
+.expression-auth-card label{font-size:13px;color:#5f4d70;gap:6px}
+.expression-auth-card input{height:44px;padding:9px 12px;font-size:16px;border-radius:9px}
+.expression-auth-submit{min-height:43px;padding:10px;background:#8563b3;border-radius:9px;color:#fff;font-size:16px;font-weight:700;margin-top:5px}
+.expression-auth-submit:disabled{opacity:.6}
+.expression-auth-switch{justify-self:center;padding:8px;font-size:14px;color:#78549d}
+.expression-auth-notice{background:#f6f0fa;padding:10px 12px;border-radius:8px;color:#674e7d;line-height:1.5;font-size:13px}
+.expression-logout{white-space:nowrap;border:1px solid #e5d9ed;border-radius:8px;background:#f6f0fb;color:#755595;font-size:12px;padding:8px 9px}
+.expression-logout:disabled{opacity:.5}
+@media(max-width:430px){.expression-auth-card{padding:21px 17px}.expression-logout{font-size:11px;padding:7px 6px}}
