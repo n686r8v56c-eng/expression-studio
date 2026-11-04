@@ -161,3 +161,5 @@
 .expression-study-url-field{display:grid;gap:6px;margin-top:3px;font-size:12px;font-weight:700;color:#72548e}
 .expression-study-url-field input{box-sizing:border-box;width:100%;min-width:0;border-radius:8px;border:1px solid #e1d6ec;background:#fff;color:#40334b;font-size:16px;min-height:37px;padding:8px 10px;font-weight:400}
 .expression-study-url-field input:focus{outline:2px solid #bd9edc;outline-offset:1px}
+
+.expression-study-title-notice{font-size:11px;color:#806794;margin-top:-4px;line-height:1.4}
