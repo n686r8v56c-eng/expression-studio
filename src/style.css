@@ -455,3 +455,12 @@ body,#root{width:100%;max-width:100%;min-width:0;overflow-x:clip}
         font-size: 15px !important
     }
 }
+
+
+/* Archive hidden genre choices, keep active genre list compact */
+.genre-archive-section{display:grid;gap:7px;margin:14px 0 12px;padding:11px;border:1px solid #e6daee;border-radius:11px;background:#f8f4fc}
+.genre-archive-heading{display:flex;align-items:center;gap:7px;color:#735398;font-size:13px;padding:2px 0 7px}
+.genre-archive-section>.line{background:#fff;border:1px solid #eee7f4;border-radius:8px;padding:7px 9px;min-height:36px}
+.genre-archive-section>.line .line-main{min-width:0;flex:1;font-size:13px}
+.genre-archive-section>.line button{display:inline-flex;gap:5px;align-items:center;justify-content:center;white-space:nowrap;font-size:12px}
+.genre-archive-section>small{color:#8b7e99;font-size:12px}
