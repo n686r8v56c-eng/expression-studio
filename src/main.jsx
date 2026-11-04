@@ -17,6 +17,12 @@ const hiddenKey=research?'hiddenResearchGenres':'hiddenGenres';
 const allGenres=d[genreKey]||[];
 const archivedGenres=(d[hiddenKey]||[]).filter(g=>allGenres.includes(g));
 const activeGenres=allGenres.filter(g=>!archivedGenres.includes(g));
+useEffect(()=>{
+ if(!activeGenres.includes(genre)){
+  setGenre(activeGenres[0]||'');
+  setCategory('전체');setSubcategory('전체');setLinkedSkill(null);
+ }
+},[mode,genre,d.genres,d.researchGenres,d.hiddenGenres,d.hiddenResearchGenres]);
 const archiveGenre=g=>{
  if(activeGenres.length<=1)return alert('표시할 장르가 하나는 남아 있어야 해.');
  mutate(z=>{z[hiddenKey]=[...new Set([...(z[hiddenKey]||[]),g])]});
