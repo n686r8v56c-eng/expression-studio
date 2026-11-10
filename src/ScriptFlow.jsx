@@ -104,7 +104,9 @@ const HOME_SERVICES=[
  {title:'대본 → 자동 영상',items:[['Invideo AI','대본·프롬프트로 영상 조립 · AI 편집','https://invideo.io'],['Pictory','대본을 장면·스톡 영상·음성·자막으로 변환','https://pictory.ai'],['Fliki','대본 → AI 내레이션 · 영상','https://fliki.ai'],['VEED','영상 편집 · 자동 자막 · AI 제작','https://www.veed.io']]},
  {title:'긴 영상 → 쇼츠',items:[['OpusClip','긴 영상에서 쇼츠 후보 추출 · 자동 편집','https://www.opus.pro'],['Klap','유튜브 영상 클립 선정 · 세로 영상 제작','https://klap.app'],['Vizard','긴 영상 클리핑 · 자막 · 세로 화면','https://vizard.ai']]},
  {title:'사진 · 영상 · 음악 소스',items:[['Pexels','무료 스톡 사진 · 영상','https://www.pexels.com'],['Pixabay','무료 사진 · 영상 · 음악 (Content ID 주의)','https://pixabay.com'],['Unsplash','인테리어 참고용 고화질 사진','https://unsplash.com']]},
- {title:'무료 배경음악',items:[['YouTube 오디오 보관함','유튜브 영상용 무료 음악 · 일부 출처 표기 필요','https://www.youtube.com/audiolibrary'],['Mixkit Music','무료 BGM · 영상 사용 가능 · 음악별 조건 확인','https://mixkit.co/free-stock-music/'],['Pixabay Music','무료 음악 · Content ID 등록 곡 주의','https://pixabay.com/music/']]},\n {title:'ChatGPT 연동 가능한 영상 AI',items:[['Runway','ChatGPT 연결 · AI 영상 생성 · 이미지 애니메이션 · 편집','https://runwayml.com'],['HeyGen','ChatGPT 연결 · AI 아바타 · 내레이션 · 영상 제작','https://www.heygen.com']]},\n {title:'허락받은 영상 · 클리핑 캠페인',items:[['Content Rewards','크리에이터 클리핑 캠페인 탐색','https://contentrewards.com/c/discover'],['Showcuts','허용된 원본으로 쇼츠 제작 캠페인','https://whop.com/showcuts-clips/']]}
+ {title:'무료 배경음악',items:[['YouTube 오디오 보관함','유튜브 영상용 무료 음악 · 일부 출처 표기 필요','https://www.youtube.com/audiolibrary'],['Mixkit Music','무료 BGM · 영상 사용 가능 · 음악별 조건 확인','https://mixkit.co/free-stock-music/'],['Pixabay Music','무료 음악 · Content ID 등록 곡 주의','https://pixabay.com/music/']]},
+ {title:'ChatGPT 연동 가능한 영상 AI',items:[['Runway','ChatGPT 연결 · AI 영상 생성 · 이미지 애니메이션 · 편집','https://runwayml.com'],['HeyGen','ChatGPT 연결 · AI 아바타 · 내레이션 · 영상 제작','https://www.heygen.com']]},
+ {title:'허락받은 영상 · 클리핑 캠페인',items:[['Content Rewards','크리에이터 클리핑 캠페인 탐색','https://contentrewards.com/c/discover'],['Showcuts','허용된 원본으로 쇼츠 제작 캠페인','https://whop.com/showcuts-clips/']]}
 ];
 function HomeProductionGuide(){
  const flows=[
