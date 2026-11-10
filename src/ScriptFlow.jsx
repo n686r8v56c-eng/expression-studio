@@ -47,6 +47,27 @@ const SEED_TECHNIQUES=CATEGORIES.flatMap(([category,,names])=>names.split('|').m
 async function techRead(){const db=await dbOpen();return new Promise((resolve,reject)=>{const r=db.transaction('data','readonly').objectStore('data').get('techniques');r.onsuccess=()=>resolve(r.result||[]);r.onerror=()=>reject(r.error)})}
 async function techWrite(data){const db=await dbOpen();return new Promise((resolve,reject)=>{const tx=db.transaction('data','readwrite');tx.objectStore('data').put(data,'techniques');tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)})}
 
+const RESEARCH_RULES=[
+ ['01 · 조사 주제','조사 키워드, 대상(여성·연령대), 국가, 조사 기준일과 기간을 먼저 고정한다.'],
+ ['02 · Flow API 원본','Trend Flow·Market Flow의 API 출처, 지표 정의, 수집 시각, 검색어·순위·원본 링크를 기록한다.'],
+ ['03 · 독립 웹 조사','ChatGPT로 네이버·유튜브·공식 쇼핑몰·브랜드·기사 자료를 별도로 조사한다. 원문 링크와 날짜를 남긴다.'],
+ ['04 · 교차검증','같은 기간·대상·지표끼리 비교한다. 결과를 일치 / 불일치 / 추가 확인 필요로 구분한다.'],
+ ['05 · 검증 보고서','확인된 사실과 AI 해석을 분리한다. 출처 없는 수치, 판매 1위 주장, 연령별 순위는 만들지 않는다.'],
+ ['06 · 스크립트 전달','검증된 근거만 Gemini 등 대본 작성에 전달하고, 완성 대본의 상품명·가격·소재·출시일을 다시 확인한다.']
+];
+function MarketResearch(){
+ const [notes,setNotes]=useState('');
+ const [loaded,setLoaded]=useState(false);
+ useEffect(()=>{let active=true;dbOpen().then(db=>new Promise((resolve,reject)=>{const q=db.transaction('data','readonly').objectStore('data').get('market-research-notes');q.onsuccess=()=>resolve(q.result||'');q.onerror=()=>reject(q.error)})).then(v=>{if(active){setNotes(v);setLoaded(true)}}).catch(()=>{if(active)setLoaded(true)});return()=>{active=false}},[]);
+ const [status,setStatus]=useState('');
+ useEffect(()=>{if(!loaded)return;dbOpen().then(db=>new Promise((resolve,reject)=>{const tx=db.transaction('data','readwrite');tx.objectStore('data').put(notes,'market-research-notes');tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)})).then(()=>setStatus('이 기기에 저장됨')).catch(()=>setStatus('저장 실패'))},[notes,loaded]);
+ return <section className="pilot-project"><span className="eyebrow">RESEARCH · CROSS VALIDATION</span><h2>시장조사</h2><p className="muted">API 원본과 독립 웹 조사를 교차검증한 뒤, 확인된 근거만 스크립트에 사용해.</p>
+ <div className="pilot-panel"><h3>조사 프로세스</h3>{RESEARCH_RULES.map(([title,desc])=><div key={title} style={{padding:'12px 0',borderBottom:'1px solid #e8e2ef'}}><strong>{title}</strong><p className="muted" style={{margin:'6px 0 0'}}>{desc}</p></div>)}</div>
+ <div className="pilot-panel"><h3>검증 기준</h3><p><b>일치</b> · 서로 독립된 근거가 같은 방향을 가리킴</p><p><b>불일치</b> · 기간·플랫폼·집계 기준을 재확인</p><p><b>확인 필요</b> · 원자료 부족 또는 검증되지 않은 주장</p><p className="muted">검색 관심도, 유튜브 노출, 판매량은 서로 다른 지표야. 네이버 데이터랩의 상대 지수도 절대 검색량으로 표현하지 않아.</p></div>
+ <div className="pilot-panel"><h3>조사 기록 · 근거 링크</h3><textarea rows={9} value={notes} onChange={e=>setNotes(e.target.value)} placeholder={'조사 주제 / 기준일 / Flow API 원본 / 웹 조사 출처 / 일치·불일치 / 최종 판단을 기록해.'}/><p className="muted">{status} · 현재 이 기기의 IndexedDB에만 저장되며 다른 기기와 자동 동기화되지 않아.</p></div>
+ <div className="pilot-panel"><h3>예시 · 여성 경량패딩</h3><p className="muted">2026년 11월 기준: 핏·디테일·컬러·소재·연관 검색어를 조사하고, 최신 제품인지 확인한다. 판매량 TOP 순위는 공식 거래 데이터가 있을 때만 주장한다.</p></div></section>
+}
+
 function App(){
  const[techniques,setTechniques]=useState([]),[techReady,setTechReady]=useState(false),[targetTech,setTargetTech]=useState(null),[videoSeek,setVideoSeek]=useState(null),[tab,setTab]=useState('home'),[items,setItems]=useState([]),[selected,setSelected]=useState(null),[url,setUrl]=useState(''),[query,setQuery]=useState(''),[folder,setFolder]=useState('전체'),[session,setSession]=useState(null),[email,setEmail]=useState(''),[password,setPassword]=useState(''),[authError,setAuthError]=useState(''),[ready,setReady]=useState(false),[notice,setNotice]=useState(''),[remoteOk,setRemoteOk]=useState(false);
  useEffect(()=>{let alive=true;localRead().then(x=>{if(alive){setItems(x);setReady(true)}}).catch(()=>{if(alive){setReady(true);setNotice('로컬 저장소를 열지 못했어')}});if(sb){sb.auth.getSession().then(({data})=>alive&&setSession(data.session));const{data:{subscription}}=sb.auth.onAuthStateChange((_,s)=>alive&&setSession(s));return()=>{alive=false;subscription.unsubscribe()}}return()=>{alive=false}},[]);
@@ -63,11 +84,12 @@ function App(){
  const folders=['전체',...new Set(items.map(x=>x.folder).filter(Boolean))];
  const copy=async s=>{try{await navigator.clipboard.writeText(s||'');setNotice('복사했어')}catch{setNotice('복사할 수 없어')}};
  const auth=async signUp=>{if(!sb)return;const{error}=signUp?await sb.auth.signUp({email,password}):await sb.auth.signInWithPassword({email,password});setAuthError(error?.message|| (signUp?'이메일 확인 후 로그인해 줘':''))};
- const nav=[['home','홈',House],['in','IN',Inbox],['script','스크립트',FileText],['library','라이브러리',Library],['draft','제작',Clapperboard],['project','프로젝트',Clapperboard]];
+ const nav=[['home','홈',House],['in','IN',Inbox],['script','스크립트',FileText],['research','시장조사',Search],['library','라이브러리',Library],['draft','제작',Clapperboard],['project','프로젝트',Clapperboard]];
  return <div className="app"><header><div><span className="eyebrow">YOUR KNOWLEDGE STUDIO</span><h1>Script Flow <span>✦</span></h1></div><div className="header-right"><span className="sync">{!sb?'기기 저장':session?(remoteOk?'클라우드 연결':'로컬 저장'):'로그인 전'}</span>{session&&<button className="iconbtn" title="로그아웃" onClick={()=>sb.auth.signOut()}><LogOut size={17}/></button>}</div></header>
  <main>{notice&&<div className="notice" role="status"><AlertCircle size={15}/>{notice}<button onClick={()=>setNotice('')}>×</button></div>}
  {tab==='home'&&!selected&&<><div className="hero"><div className="eyebrow">COLLECT · RESEARCH · CREATE</div><h2>영상에서 아이디어까지,<br/>한곳에서.</h2><p>원문을 보존하고, 자료를 정리하고, 새로운 콘텐츠로 발전시켜 봐.</p><button className="primary" onClick={()=>setTab('in')}><Plus size={18}/> 영상 수집</button></div><div className="stats"><div><b>{items.length}</b><small>수집 영상</small></div><div><b>{items.filter(x=>x.transcript.trim()).length}</b><small>원문 보관</small></div><div><b>{items.filter(x=>x.draft.trim()).length}</b><small>제작 초안</small></div></div><HomeProductionGuide/><h3>최근 수집</h3><VideoList items={items.slice(0,6)} onOpen={x=>{setSelected(x);setTab('script')}}/></>}
- {tab==='project'&&!selected&&<PilotProject onNotice={setNotice}/>}\n {tab==='in'&&!selected&&<><h2>영상 수집</h2><p className="muted">링크 하나로 영상을 라이브러리에 등록해.</p><div className="input-row"><input aria-label="YouTube 링크" placeholder="YouTube 링크 붙여넣기" value={url} onChange={e=>setUrl(e.target.value)} onKeyDown={e=>e.key==='Enter'&&add()}/><button className="primary" onClick={add}><Plus size={18}/> 등록</button></div><div className="hint"><b>원문 추출 안내</b><p>영상을 등록한 뒤 스크립트 화면에서 원문 자동 추출을 눌러 줘. Cloudflare에 SUPADATA_API_KEY 설정이 필요해. 일부 영상은 접근 제한이나 음성 인식 처리로 추출되지 않을 수 있어.</p></div><h3>수집한 영상</h3><VideoList items={items} onOpen={x=>{setSelected(x);setTab('script')}}/></>}
+ {tab==='project'&&!selected&&<PilotProject onNotice={setNotice}/>}
+ {tab==='research'&&!selected&&<MarketResearch/>}\n {tab==='in'&&!selected&&<><h2>영상 수집</h2><p className="muted">링크 하나로 영상을 라이브러리에 등록해.</p><div className="input-row"><input aria-label="YouTube 링크" placeholder="YouTube 링크 붙여넣기" value={url} onChange={e=>setUrl(e.target.value)} onKeyDown={e=>e.key==='Enter'&&add()}/><button className="primary" onClick={add}><Plus size={18}/> 등록</button></div><div className="hint"><b>원문 추출 안내</b><p>영상을 등록한 뒤 스크립트 화면에서 원문 자동 추출을 눌러 줘. Cloudflare에 SUPADATA_API_KEY 설정이 필요해. 일부 영상은 접근 제한이나 음성 인식 처리로 추출되지 않을 수 있어.</p></div><h3>수집한 영상</h3><VideoList items={items} onOpen={x=>{setSelected(x);setTab('script')}}/></>}
  {tab==='library'&&!selected&&<TechniqueLibrary stored={techniques} videos={items} onSave={saveTechnique} onVideo={(x,time)=>{setVideoSeek(time||null);setSelected(x);setTab('script')}} target={targetTech} onTargetClear={()=>setTargetTech(null)}/>}
  {(tab==='script'||tab==='draft')&&!selected&&<><h2>{tab==='library'?'라이브러리':tab==='draft'?'콘텐츠 제작':'스크립트'}</h2><div className="input-row"><Search size={18}/><input placeholder="제목·원문·태그·초안 검색" value={query} onChange={e=>setQuery(e.target.value)}/></div><div className="chips">{folders.map(f=><button key={f} className={folder===f?'active':''} onClick={()=>setFolder(f)}>{f}</button>)}</div><VideoList items={tab==='draft'?filtered.filter(x=>x.draft):filtered} onOpen={x=>setSelected(x)}/></>}
  {selected&&<Editor key={selected.id} item={items.find(x=>x.id===selected.id)||selected} tab={tab} onBack={()=>setSelected(null)} onSave={save} onDelete={remove} onCopy={copy} techniques={techniques} onLink={linkExample} onTechnique={id=>{setSelected(null);setTargetTech(id);setTab('library')}} initialSeek={videoSeek}/>}
