@@ -9,6 +9,33 @@ const vid=url=>{try{const u=new URL(url);if(u.hostname==='youtu.be')return u.pat
 const dbOpen=()=>new Promise((resolve,reject)=>{const r=indexedDB.open('script-flow-v1',1);r.onupgradeneeded=()=>r.result.createObjectStore('data');r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)});
 async function localRead(){const db=await dbOpen();return new Promise((res,rej)=>{const t=db.transaction('data','readonly').objectStore('data').get('library');t.onsuccess=()=>res(t.result||[]);t.onerror=()=>rej(t.error)})}
 async function localWrite(items){const db=await dbOpen();return new Promise((res,rej)=>{const t=db.transaction('data','readwrite');t.objectStore('data').put(items,'library');t.oncomplete=res;t.onerror=()=>rej(t.error)})}
+const PILOT_STEPS=[
+'30초 대본 검토 및 확정',
+'장면 이미지 6장 저장 · CapCut에 불러오기',
+'새 프로젝트 생성 · 9:16 비율 설정',
+'이미지 01~06 순서대로 배치 (5·4·4·4·5·8초)',
+'한국어 내레이션 생성 · 실제 길이에 맞춰 컷 조절',
+'자동 자막 생성 · 오탈자 수정',
+'무료 배경음악 선택 · 사용 조건 확인 · 음량 조절',
+'화면 전환과 이미지 움직임 적용',
+'최종 검수 · 1080p MP4 내보내기',
+'쇼츠 업로드 · 성과 기록'
+];
+const PILOT_SCRIPT='혼자 일하는데 직원이 다섯 명이라면 어떨까요?\n\n첫 번째, 조사원. 필요한 정보를 찾습니다.\n두 번째, 기획자. 아이디어를 정리합니다.\n세 번째, 작가. 대본을 씁니다.\n네 번째, 제작자. 영상을 만듭니다.\n다섯 번째, 분석가. 결과를 분석합니다.\n\n다섯 역할을 AI로 연결하면, 혼자서도 작은 콘텐츠 팀처럼 일할 수 있습니다.';
+async function pilotRead(){const db=await dbOpen();return new Promise((res,rej)=>{const q=db.transaction('data','readonly').objectStore('data').get('pilot-001');q.onsuccess=()=>res(q.result||{});q.onerror=()=>rej(q.error)})}
+async function pilotWrite(v){const db=await dbOpen();return new Promise((res,rej)=>{const tx=db.transaction('data','readwrite');tx.objectStore('data').put(v,'pilot-001');tx.oncomplete=res;tx.onerror=()=>rej(tx.error)})}
+function PilotProject({onNotice}){
+ const[done,setDone]=useState([]),[loaded,setLoaded]=useState(false),[notes,setNotes]=useState('');
+ useEffect(()=>{let live=true;pilotRead().then(x=>{if(live){setDone(Array.isArray(x.done)?x.done:[]);setNotes(x.notes||'');setLoaded(true)}}).catch(()=>{if(live){setLoaded(true);onNotice('프로젝트 기록을 불러오지 못했어')}});return()=>{live=false}},[]);
+ useEffect(()=>{if(loaded)pilotWrite({done,notes}).catch(()=>onNotice('프로젝트 기록 저장에 실패했어'))},[done,notes,loaded]);
+ const copyScript=()=>navigator.clipboard.writeText(PILOT_SCRIPT).then(()=>onNotice('대본을 복사했어')).catch(()=>onNotice('복사 실패'));
+ return <section className="pilot-project"><span className="eyebrow">PILOT 001 · SHORTS</span><h2>AI 직원 5명으로 혼자 일하는 시스템</h2><p className="muted">30초 쇼츠 · 세로 9:16 · CapCut · 이미지 6장 + 한국어 내레이션</p>
+ <div className="pilot-panel"><div className="pilot-row"><h3>30초 내레이션 대본</h3><button className="pilot-small-button" onClick={copyScript}><Copy size={15}/> 복사</button></div><p className="pilot-script">{PILOT_SCRIPT}</p></div>
+ <div className="pilot-panel"><h3>장면별 콘티</h3><div className="pilot-scenes">{[['01','0–5초','오프닝 · 혼자인데 직원이 5명?'],['02','5–9초','조사원 · 정보 검색'],['03','9–13초','기획자 · 아이디어 정리'],['04','13–17초','작가 · 대본 작성'],['05','17–22초','제작자 · 영상 제작'],['06','22–30초','분석가 · 결과 분석 + 5명 연결']].map(([num,time,desc])=><div key={num}><b>{num}</b><span>{time}</span><span>{desc}</span></div>)}</div><p className="muted">음성 길이에 따라 각 장면 시간을 조정해 줘.</p></div>
+ <div className="pilot-panel"><div className="pilot-row"><h3>제작 체크리스트</h3><strong>{done.length}/{PILOT_STEPS.length}</strong></div><div className="pilot-progress"><span style={{width:(done.length/PILOT_STEPS.length*100)+'%'}}/></div><div className="pilot-checklist">{PILOT_STEPS.map((step,i)=><label key={i}><input type="checkbox" checked={done.includes(i)} onChange={e=>setDone(old=>e.target.checked?[...old,i]:old.filter(x=>x!==i))}/><span>{step}</span></label>)}</div></div>
+ <div className="pilot-panel"><h3>제작 메모</h3><textarea aria-label="제작 메모" value={notes} onChange={e=>setNotes(e.target.value)} placeholder="음악 후보, 수정할 장면, 업로드 링크 등을 기록해 둬" rows={4}/><p className="muted">체크리스트와 메모는 현재 기기의 IndexedDB에 자동 저장돼. 다른 기기와 동기화되지는 않아.</p></div>
+ </section>
+}
 const parseTime=t=>{const parts=String(t||'').trim().split(':').map(Number);if(!parts.length||parts.some(n=>!Number.isFinite(n)||n<0))return null;return parts.reduce((n,x)=>n*60+x,0)};
 const fmt=t=>new Date(t).toLocaleDateString('ko-KR');
 const CATEGORIES=[['HOOK','관심 유도','개인적 사연으로 시작하기|결과 먼저 보여주기|호기심 격차 만들기|질문으로 시작하기'],['STRUCTURE','이야기 구성','3막 구조|문제에서 해결로|수미상관|여정형 구성'],['CHARACTER','인물 설계','인물의 목표 설정|관계 소개|인물의 변화'],['CONFLICT','긴장과 변화','장애물 설정|기대와 현실의 차이|반전'],['EMOTION','감정 설계','공감 유도|감정 대비|여운 만들기'],['INFORMATION','정보 전달','경험을 팁으로 전환|사례에서 원리 도출|비교 설명'],['NARRATION','서술과 대사','1인칭 내레이션|현장 대화 활용|묘사로 전달하기'],['VISUAL','시청각 연출','B-roll 활용|몽타주|음악과 감정 연결']];
@@ -36,11 +63,11 @@ function App(){
  const folders=['전체',...new Set(items.map(x=>x.folder).filter(Boolean))];
  const copy=async s=>{try{await navigator.clipboard.writeText(s||'');setNotice('복사했어')}catch{setNotice('복사할 수 없어')}};
  const auth=async signUp=>{if(!sb)return;const{error}=signUp?await sb.auth.signUp({email,password}):await sb.auth.signInWithPassword({email,password});setAuthError(error?.message|| (signUp?'이메일 확인 후 로그인해 줘':''))};
- const nav=[['home','홈',House],['in','IN',Inbox],['script','스크립트',FileText],['library','라이브러리',Library],['draft','제작',Clapperboard]];
+ const nav=[['home','홈',House],['in','IN',Inbox],['script','스크립트',FileText],['library','라이브러리',Library],['draft','제작',Clapperboard],['project','프로젝트',Clapperboard]];
  return <div className="app"><header><div><span className="eyebrow">YOUR KNOWLEDGE STUDIO</span><h1>Script Flow <span>✦</span></h1></div><div className="header-right"><span className="sync">{!sb?'기기 저장':session?(remoteOk?'클라우드 연결':'로컬 저장'):'로그인 전'}</span>{session&&<button className="iconbtn" title="로그아웃" onClick={()=>sb.auth.signOut()}><LogOut size={17}/></button>}</div></header>
  <main>{notice&&<div className="notice" role="status"><AlertCircle size={15}/>{notice}<button onClick={()=>setNotice('')}>×</button></div>}
  {tab==='home'&&!selected&&<><div className="hero"><div className="eyebrow">COLLECT · RESEARCH · CREATE</div><h2>영상에서 아이디어까지,<br/>한곳에서.</h2><p>원문을 보존하고, 자료를 정리하고, 새로운 콘텐츠로 발전시켜 봐.</p><button className="primary" onClick={()=>setTab('in')}><Plus size={18}/> 영상 수집</button></div><div className="stats"><div><b>{items.length}</b><small>수집 영상</small></div><div><b>{items.filter(x=>x.transcript.trim()).length}</b><small>원문 보관</small></div><div><b>{items.filter(x=>x.draft.trim()).length}</b><small>제작 초안</small></div></div><HomeProductionGuide/><h3>최근 수집</h3><VideoList items={items.slice(0,6)} onOpen={x=>{setSelected(x);setTab('script')}}/></>}
- {tab==='in'&&!selected&&<><h2>영상 수집</h2><p className="muted">링크 하나로 영상을 라이브러리에 등록해.</p><div className="input-row"><input aria-label="YouTube 링크" placeholder="YouTube 링크 붙여넣기" value={url} onChange={e=>setUrl(e.target.value)} onKeyDown={e=>e.key==='Enter'&&add()}/><button className="primary" onClick={add}><Plus size={18}/> 등록</button></div><div className="hint"><b>원문 추출 안내</b><p>영상을 등록한 뒤 스크립트 화면에서 원문 자동 추출을 눌러 줘. Cloudflare에 SUPADATA_API_KEY 설정이 필요해. 일부 영상은 접근 제한이나 음성 인식 처리로 추출되지 않을 수 있어.</p></div><h3>수집한 영상</h3><VideoList items={items} onOpen={x=>{setSelected(x);setTab('script')}}/></>}
+ {tab==='project'&&!selected&&<PilotProject onNotice={setNotice}/>}\n {tab==='in'&&!selected&&<><h2>영상 수집</h2><p className="muted">링크 하나로 영상을 라이브러리에 등록해.</p><div className="input-row"><input aria-label="YouTube 링크" placeholder="YouTube 링크 붙여넣기" value={url} onChange={e=>setUrl(e.target.value)} onKeyDown={e=>e.key==='Enter'&&add()}/><button className="primary" onClick={add}><Plus size={18}/> 등록</button></div><div className="hint"><b>원문 추출 안내</b><p>영상을 등록한 뒤 스크립트 화면에서 원문 자동 추출을 눌러 줘. Cloudflare에 SUPADATA_API_KEY 설정이 필요해. 일부 영상은 접근 제한이나 음성 인식 처리로 추출되지 않을 수 있어.</p></div><h3>수집한 영상</h3><VideoList items={items} onOpen={x=>{setSelected(x);setTab('script')}}/></>}
  {tab==='library'&&!selected&&<TechniqueLibrary stored={techniques} videos={items} onSave={saveTechnique} onVideo={(x,time)=>{setVideoSeek(time||null);setSelected(x);setTab('script')}} target={targetTech} onTargetClear={()=>setTargetTech(null)}/>}
  {(tab==='script'||tab==='draft')&&!selected&&<><h2>{tab==='library'?'라이브러리':tab==='draft'?'콘텐츠 제작':'스크립트'}</h2><div className="input-row"><Search size={18}/><input placeholder="제목·원문·태그·초안 검색" value={query} onChange={e=>setQuery(e.target.value)}/></div><div className="chips">{folders.map(f=><button key={f} className={folder===f?'active':''} onClick={()=>setFolder(f)}>{f}</button>)}</div><VideoList items={tab==='draft'?filtered.filter(x=>x.draft):filtered} onOpen={x=>setSelected(x)}/></>}
  {selected&&<Editor key={selected.id} item={items.find(x=>x.id===selected.id)||selected} tab={tab} onBack={()=>setSelected(null)} onSave={save} onDelete={remove} onCopy={copy} techniques={techniques} onLink={linkExample} onTechnique={id=>{setSelected(null);setTargetTech(id);setTab('library')}} initialSeek={videoSeek}/>}
@@ -53,8 +80,8 @@ const HOME_SERVICES=[
  {title:'조사 · 영상 분석',items:[['ChatGPT','키워드 조사 · 제목 기획 · 가상 스크립트','https://chatgpt.com'],['Google AI Studio','기존 영상의 화면·음성 분석 · 쇼츠 콘티','https://aistudio.google.com'],['Gemini','유튜브 콘텐츠 질문 · 아이디어 발전','https://gemini.google.com'],['Descript','영상 전사 · 텍스트 기반 편집','https://www.descript.com']]},
  {title:'대본 → 자동 영상',items:[['Invideo AI','대본·프롬프트로 영상 조립 · AI 편집','https://invideo.io'],['Pictory','대본을 장면·스톡 영상·음성·자막으로 변환','https://pictory.ai'],['Fliki','대본 → AI 내레이션 · 영상','https://fliki.ai'],['VEED','영상 편집 · 자동 자막 · AI 제작','https://www.veed.io']]},
  {title:'긴 영상 → 쇼츠',items:[['OpusClip','긴 영상에서 쇼츠 후보 추출 · 자동 편집','https://www.opus.pro'],['Klap','유튜브 영상 클립 선정 · 세로 영상 제작','https://klap.app'],['Vizard','긴 영상 클리핑 · 자막 · 세로 화면','https://vizard.ai']]},
- {title:'사진 · 영상 · 음악 소스',items:[['Pexels','무료 스톡 사진 · 영상','https://www.pexels.com'],['Pixabay','무료 사진 · 영상 · 음악','https://pixabay.com'],['Unsplash','인테리어 참고용 고화질 사진','https://unsplash.com']]},
- {title:'허락받은 영상 · 클리핑 캠페인',items:[['Content Rewards','크리에이터 클리핑 캠페인 탐색','https://contentrewards.com/c/discover'],['Showcuts','허용된 원본으로 쇼츠 제작 캠페인','https://whop.com/showcuts-clips/']]}
+ {title:'사진 · 영상 · 음악 소스',items:[['Pexels','무료 스톡 사진 · 영상','https://www.pexels.com'],['Pixabay','무료 사진 · 영상 · 음악 (Content ID 주의)','https://pixabay.com'],['Unsplash','인테리어 참고용 고화질 사진','https://unsplash.com']]},
+ {title:'무료 배경음악',items:[['YouTube 오디오 보관함','유튜브 영상용 무료 음악 · 일부 출처 표기 필요','https://www.youtube.com/audiolibrary'],['Mixkit Music','무료 BGM · 영상 사용 가능 · 음악별 조건 확인','https://mixkit.co/free-stock-music/'],['Pixabay Music','무료 음악 · Content ID 등록 곡 주의','https://pixabay.com/music/']]},\n {title:'ChatGPT 연동 가능한 영상 AI',items:[['Runway','ChatGPT 연결 · AI 영상 생성 · 이미지 애니메이션 · 편집','https://runwayml.com'],['HeyGen','ChatGPT 연결 · AI 아바타 · 내레이션 · 영상 제작','https://www.heygen.com']]},\n {title:'허락받은 영상 · 클리핑 캠페인',items:[['Content Rewards','크리에이터 클리핑 캠페인 탐색','https://contentrewards.com/c/discover'],['Showcuts','허용된 원본으로 쇼츠 제작 캠페인','https://whop.com/showcuts-clips/']]}
 ];
 function HomeProductionGuide(){
  const flows=[
