@@ -19,3 +19,31 @@
 .summary-reader{background:#fff;border:1px solid #eee6f2;border-radius:16px;padding:16px;margin:14px 0 18px}.summary-reader-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:16px}.summary-reader-head strong{font-size:17px}.summary-reader-head button,.summary-title-actions button{border:1px solid #e8ddef;background:#fff;color:#7955a5;border-radius:9px;padding:8px 11px;font-size:13px}.summary-day{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:16px;margin:24px 0 12px;padding-top:15px;border-top:1px solid #eee8f2}.summary-day span{font-size:12px;background:#f1eafb;color:#7b52a9;padding:6px 9px;border-radius:8px}.summary-event{display:grid;grid-template-columns:74px minmax(0,1fr);gap:10px;align-items:start;padding:11px 0;border-bottom:1px solid #f1edf4;font-size:14px;line-height:1.6}.summary-clock{font-size:12px;color:#7b54ab;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}.summary-title-actions{display:flex;align-items:center;gap:7px}
 
 button.summary-clock{border:0;background:#f1eafb;color:#7650a7;border-radius:8px;padding:7px 5px;cursor:pointer;text-align:center;align-self:start;font-size:12px;font-weight:750;white-space:nowrap;touch-action:manipulation}.video-player-section{scroll-margin-top:14px}
+
+
+/* Script Flow home: production routes and creator services */
+.production-guide{margin-top:30px}
+.production-guide-heading h3,.production-services-heading h3{margin:7px 0 5px;font-size:20px}
+.production-guide-heading p,.production-services-heading p{margin:0 0 16px;color:#81798a;font-size:13px;line-height:1.6}
+.production-flow-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.production-flow-card{background:#fff;border:1px solid #eae1f4;border-radius:18px;padding:19px;min-width:0}
+.production-flow-tag{display:inline-block;color:#8060ad;font-size:10px;letter-spacing:1.1px;font-weight:800}
+.production-flow-card h4{font-size:16px;margin:9px 0 5px;line-height:1.5}
+.production-flow-card>p{font-size:12px;color:#81798a;margin:0 0 15px}
+.production-flow-card ol{padding:0;margin:0;list-style:none}
+.production-flow-card li{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-top:1px solid #f2edf6;font-size:13px;line-height:1.5}
+.production-step-number{font-size:11px;font-weight:800;color:#9b77c7;flex:none}
+.production-flow-hint{margin-top:12px;background:#f7f2fc;border-radius:10px;padding:11px;color:#71558f;font-size:12px;line-height:1.6}
+.production-services-heading{margin-top:30px}
+.production-service-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.production-service-group{border:1px solid #eee8f4;border-radius:15px;background:#fff;padding:15px;min-width:0}
+.production-service-group h4{margin:0 0 10px;font-size:14px}
+.production-service-list{display:flex;flex-direction:column}
+.production-service-link{display:flex;align-items:center;justify-content:space-between;gap:8px;text-decoration:none;color:#32283b;padding:10px 2px;border-top:1px solid #f2edf6}
+.production-service-link span{display:flex;flex-direction:column;gap:4px;min-width:0}
+.production-service-link strong{font-size:13px}
+.production-service-link small{color:#82788a;font-size:11px;line-height:1.45}
+.production-service-link svg{flex:none;color:#9a7aba}
+.production-service-link:hover strong{color:#8060bb}
+.production-license-note{font-size:11px;color:#8b8192;line-height:1.7;margin:14px 0 0}
+@media(max-width:640px){.production-flow-grid,.production-service-groups{grid-template-columns:1fr}.production-flow-card{padding:16px}.production-guide{margin-top:25px}}
