@@ -11,7 +11,7 @@ export async function onRequestPost({request,env}){
   if(!upstream.ok)return json({error:'PROVIDER_ERROR',message:result.message||result.error||'자막을 가져올 수 없어.',status:upstream.status},upstream.status===429?429:502);
   if(result.jobId||result.job_id)return json({status:'processing',jobId:result.jobId||result.job_id});
   const parts=Array.isArray(result.content)?result.content:Array.isArray(result.transcript)?result.transcript:Array.isArray(result.segments)?result.segments:[];
-  const stamp=n=>{const s=Math.floor(Number(n)||0);return String(Math.floor(s/3600)).padStart(2,'0')+':'+String(Math.floor(s%3600/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+  const stamp=n=>{const s=Math.floor((Number(n)||0)/1000);return String(Math.floor(s/3600)).padStart(2,'0')+':'+String(Math.floor(s%3600/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
   const transcript=parts.length?parts.map(p=>'['+stamp(p.offset??p.start??0)+'] '+String(p.text||'').trim()).join('\n'):String(result.content||result.text||result.transcript||'');
   if(!transcript.trim())return json({error:'NO_TRANSCRIPT',message:'이 영상에서 추출할 수 있는 자막이 없어.'},404);
   return json({status:'completed',transcript,lang:result.lang||result.language||null});
