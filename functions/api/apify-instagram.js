@@ -16,8 +16,12 @@ export async function onRequestPost({request,env}){
   const rows=await r.json();if(!Array.isArray(rows))return json({error:'Apify 응답이 예상한 형식이 아니야.'},502);
   const images=[];
   const add=value=>{if(typeof value==='string'&&validMedia(value)&&!images.includes(value))images.push(value)};
-  for(const row of rows){const children=Array.isArray(row.childPosts)?row.childPosts:Array.isArray(row.carouselMedia)?row.carouselMedia:[];
-   if(children.length){for(const child of children){add(child.displayUrl);add(child.imageUrl);add(child.url)}}else{add(row.displayUrl);add(row.imageUrl)}
+  for(const row of rows){
+   const children=Array.isArray(row.childPosts)?row.childPosts:Array.isArray(row.carouselMedia)?row.carouselMedia:[];
+   const imageList=Array.isArray(row.images)?row.images:[];
+   for(const item of imageList){if(typeof item==='string')add(item);else if(item){add(item.url);add(item.displayUrl);add(item.imageUrl)}}
+   for(const child of children){if(!child)continue;add(child.displayUrl);add(child.imageUrl);if(Array.isArray(child.images)){for(const item of child.images){if(typeof item==='string')add(item);else if(item){add(item.url);add(item.displayUrl)}}}}
+   if(!images.length){add(row.displayUrl);add(row.imageUrl)}
   }
   if(!images.length)return json({error:'이미지 주소를 찾지 못했어. 수집기 응답 형식 또는 게시물 접근 제한을 확인해 줘.'},422);
   return json({images,note:'Apify에서 '+images.length+'장 이미지 주소를 가져왔어. 사진 비율과 다운로드 결과를 확인해 줘.'});
