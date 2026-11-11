@@ -1,9 +1,10 @@
 import React,{useEffect,useMemo,useState} from 'react';
 import{createRoot}from'react-dom/client';
 import{createClient}from'@supabase/supabase-js';
-import{House,Inbox,FileText,Library,Clapperboard,Plus,Search,Copy,Trash2,ExternalLink,Save,ArrowLeft,LogOut,Check,AlertCircle}from'lucide-react';
+import{House,Inbox,FileText,Library,Clapperboard,Plus,Search,Copy,Trash2,ExternalLink,Save,ArrowLeft,LogOut,Check,AlertCircle,Download}from'lucide-react';
 import './script-flow.css';
 import SourcingFlow from './SourcingFlow.jsx';
+import SaverFlow from './SaverFlow.jsx';
 const sb=import.meta.env.VITE_SUPABASE_URL&&import.meta.env.VITE_SUPABASE_ANON_KEY?createClient(import.meta.env.VITE_SUPABASE_URL,import.meta.env.VITE_SUPABASE_ANON_KEY):null;
 const uid=()=>crypto.randomUUID();
 const vid=url=>{try{const u=new URL(url);if(u.hostname==='youtu.be')return u.pathname.slice(1).split('/')[0];if(u.hostname.endsWith('youtube.com'))return u.searchParams.get('v')||u.pathname.match(/\/(?:shorts|embed|live)\/([\w-]{11})/)?.[1]}catch{}return null};
@@ -85,11 +86,12 @@ function App(){
  const folders=['전체',...new Set(items.map(x=>x.folder).filter(Boolean))];
  const copy=async s=>{try{await navigator.clipboard.writeText(s||'');setNotice('복사했어')}catch{setNotice('복사할 수 없어')}};
  const auth=async signUp=>{if(!sb)return;const{error}=signUp?await sb.auth.signUp({email,password}):await sb.auth.signInWithPassword({email,password});setAuthError(error?.message|| (signUp?'이메일 확인 후 로그인해 줘':''))};
- const nav=[['home','홈',House],['in','IN',Inbox],['script','스크립트',FileText],['research','시장조사',Search],['library','라이브러리',Library],['draft','제작',Clapperboard],['project','프로젝트',Clapperboard]];
+ const nav=[['home','홈',House],['in','IN',Inbox],['script','스크립트',FileText],['research','시장조사',Search],['library','라이브러리',Library],['draft','제작',Clapperboard],['project','프로젝트',Clapperboard],['saver','Saver',Download]];
  return <div className="app"><header><div><span className="eyebrow">YOUR KNOWLEDGE STUDIO</span><h1>{genre==='sourcing'?'Sourcing Flow':'Script Flow'} <span>✦</span></h1></div><div className="header-right"><select aria-label="장르 변환" value={genre} onChange={e=>{setGenre(e.target.value);setSelected(null);setTab('home')}} style={{border:'1px solid #e5dced',borderRadius:10,padding:'8px 5px',background:'white',color:'#70508c',fontSize:13,maxWidth:140}}><option value="script">Script Flow</option><option value="sourcing">Sourcing Flow</option></select><span className="sync">{!sb?'기기 저장':session?(remoteOk?'클라우드 연결':'로컬 저장'):'로그인 전'}</span>{session&&<button className="iconbtn" title="로그아웃" onClick={()=>sb.auth.signOut()}><LogOut size={17}/></button>}</div></header>
  <main>{genre==='sourcing'?<SourcingFlow/>:<>{notice&&<div className="notice" role="status"><AlertCircle size={15}/>{notice}<button onClick={()=>setNotice('')}>×</button></div>}
  {tab==='home'&&!selected&&<><div className="hero"><div className="eyebrow">COLLECT · RESEARCH · CREATE</div><h2>영상에서 아이디어까지,<br/>한곳에서.</h2><p>원문을 보존하고, 자료를 정리하고, 새로운 콘텐츠로 발전시켜 봐.</p><button className="primary" onClick={()=>setTab('in')}><Plus size={18}/> 영상 수집</button></div><div className="stats"><div><b>{items.length}</b><small>수집 영상</small></div><div><b>{items.filter(x=>x.transcript.trim()).length}</b><small>원문 보관</small></div><div><b>{items.filter(x=>x.draft.trim()).length}</b><small>제작 초안</small></div></div><HomeProductionGuide/><h3>최근 수집</h3><VideoList items={items.slice(0,6)} onOpen={x=>{setSelected(x);setTab('script')}}/></>}
  {tab==='project'&&!selected&&<PilotProject onNotice={setNotice}/>}
+ {tab==='saver'&&!selected&&<SaverFlow/>}
  {tab==='research'&&!selected&&<MarketResearch/>}\n {tab==='in'&&!selected&&<><h2>영상 수집</h2><p className="muted">링크 하나로 영상을 라이브러리에 등록해.</p><div className="input-row"><input aria-label="YouTube 링크" placeholder="YouTube 링크 붙여넣기" value={url} onChange={e=>setUrl(e.target.value)} onKeyDown={e=>e.key==='Enter'&&add()}/><button className="primary" onClick={add}><Plus size={18}/> 등록</button></div><div className="hint"><b>원문 추출 안내</b><p>영상을 등록한 뒤 스크립트 화면에서 원문 자동 추출을 눌러 줘. Cloudflare에 SUPADATA_API_KEY 설정이 필요해. 일부 영상은 접근 제한이나 음성 인식 처리로 추출되지 않을 수 있어.</p></div><h3>수집한 영상</h3><VideoList items={items} onOpen={x=>{setSelected(x);setTab('script')}}/></>}
  {tab==='library'&&!selected&&<TechniqueLibrary stored={techniques} videos={items} onSave={saveTechnique} onVideo={(x,time)=>{setVideoSeek(time||null);setSelected(x);setTab('script')}} target={targetTech} onTargetClear={()=>setTargetTech(null)}/>}
  {(tab==='script'||tab==='draft')&&!selected&&<><h2>{tab==='library'?'라이브러리':tab==='draft'?'콘텐츠 제작':'스크립트'}</h2><div className="input-row"><Search size={18}/><input placeholder="제목·원문·태그·초안 검색" value={query} onChange={e=>setQuery(e.target.value)}/></div><div className="chips">{folders.map(f=><button key={f} className={folder===f?'active':''} onClick={()=>setFolder(f)}>{f}</button>)}</div><VideoList items={tab==='draft'?filtered.filter(x=>x.draft):filtered} onOpen={x=>setSelected(x)}/></>}
