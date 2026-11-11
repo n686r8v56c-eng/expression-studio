@@ -11,7 +11,7 @@ export async function onRequestPost({request,env}){
  if(!/^[a-zA-Z0-9_~-]+$/.test(actor))return json({error:'APIFY_ACTOR_ID 설정을 확인해 줘.'},503);
  try{
   const endpoint='https://api.apify.com/v2/acts/'+encodeURIComponent(actor)+'/run-sync-get-dataset-items?timeout=90&memory=256';
-  const r=await fetch(endpoint,{method:'POST',headers:{'authorization':'Bearer '+env.APIFY_API_TOKEN,'content-type':'application/json'},body:JSON.stringify({directUrls:[url],resultsLimit:1,resultsType:'posts',searchType:'hashtag'})});
+  const r=await fetch(endpoint,{method:'POST',headers:{'authorization':'Bearer '+env.APIFY_API_TOKEN,'content-type':'application/json'},body:JSON.stringify({directUrls:[url],resultsLimit:1,resultsType:'posts'})});
   if(!r.ok){const detail=await r.text();return json({error:'Apify 실행 실패 ('+r.status+'). Actor 설정과 사용량을 확인해 줘.',detail:detail.slice(0,300)},502)}
   const rows=await r.json();if(!Array.isArray(rows))return json({error:'Apify 응답이 예상한 형식이 아니야.'},502);
   const images=[];
