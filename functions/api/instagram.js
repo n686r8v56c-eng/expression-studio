@@ -21,9 +21,18 @@ export async function onRequestGet({request}){
   const html=await r.text();
   const tags=[...html.matchAll(/<meta\s+[^>]*>/gi)].map(x=>x[0]);
   const find=key=>{for(const tag of tags){if(!new RegExp('(?:property|name)\\s*=\\s*["\\\']'+key+'["\\\']','i').test(tag))continue;const m=tag.match(/content\s*=\s*(["'])(.*?)\1/i);if(m)return decode(m[2])}return ''};
-  const image=find('og:image')||find('twitter:image'),title=find('og:title')||'Instagram';
-  if(!image)return json({error:'사진을 찾지 못했어. 비공개 게시물이나 인스타그램 접근 제한일 수 있어.'},422);
-  const media=new URL(image);if(!mediaHost(media.hostname))return json({error:'사진 주소를 확인할 수 없어.'},422);
-  return json({title,images:[image],note:'공개 미리보기 이미지 1장만 확인됐어. 여러 장 게시물의 전체 사진을 가져오지는 못할 수 있어.'});
+  const preview=find('og:image')||find('twitter:image'),title=find('og:title')||'Instagram';
+  // Prefer the post's embedded display image variants over cropped social-preview thumbnails.
+  // This is best-effort: Instagram does not consistently expose these fields publicly.
+  const candidates=[];
+  const push=(value,width=0,height=0)=>{try{const cleaned=decode(String(value).replace(/\\\\u0026/g,'&').replace(/\\u0026/g,'&').replace(/\\\//g,'/'));const parsed=new URL(cleaned);if(parsed.protocol==='https:'&&mediaHost(parsed.hostname)&&!candidates.some(x=>x.url===cleaned))candidates.push({url:cleaned,width:Number(width)||0,height:Number(height)||0})}catch{}};
+  for(const m of html.matchAll(/"(?:display_url|display_src|image_url)"\s*:\s*"((?:\\.|[^"\\])*)"/g)){try{push(JSON.parse('"'+m[1]+'"'))}catch{}}
+  for(const m of html.matchAll(/"display_resources"\s*:\s*(\[[\s\S]{0,4000}?\])/g)){try{const variants=JSON.parse(m[1]);for(const v of variants)push(v.src,v.config_width,v.config_height)}catch{}}
+  if(preview)push(preview);
+  if(!candidates.length)return json({error:'사진을 찾지 못했어. 비공개 게시물이나 인스타그램 접근 제한일 수 있어.'},422);
+  const embedded=candidates.filter(x=>x.url!==preview);
+  const best=(embedded.length?embedded:candidates).sort((a,b)=>(b.width*b.height)-(a.width*a.height))[0];
+  const originalAvailable=embedded.length>0;
+  return json({title,images:[best.url],originalAvailable,note:originalAvailable?'게시물 이미지 주소를 찾았어. 원본 비율을 확인해 줘.':'인스타그램에서 원본 이미지 주소를 공개하지 않아 공유용 미리보기만 가져왔어. 이 사진은 정사각형으로 잘렸을 수 있어.'});
  }catch{return json({error:'게시물 사진을 불러오지 못했어.'},502)}
 }
