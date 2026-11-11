@@ -20,7 +20,7 @@ export async function onRequestPost({request,env}){
    const children=Array.isArray(row.childPosts)?row.childPosts:Array.isArray(row.carouselMedia)?row.carouselMedia:[];
    const imageList=Array.isArray(row.images)?row.images:[];
    for(const item of imageList){if(typeof item==='string')add(item);else if(item){add(item.url);add(item.displayUrl);add(item.imageUrl)}}
-   for(const child of children){if(!child)continue;add(child.displayUrl);add(child.imageUrl);if(Array.isArray(child.images)){for(const item of child.images){if(typeof item==='string')add(item);else if(item){add(item.url);add(item.displayUrl)}}}}
+   if(!imageList.length)for(const child of children){if(!child)continue;add(child.displayUrl);add(child.imageUrl);if(Array.isArray(child.images)){for(const item of child.images){if(typeof item==='string')add(item);else if(item){add(item.url);add(item.displayUrl)}}}}
    if(!images.length){add(row.displayUrl);add(row.imageUrl)}
   }
   if(!images.length)return json({error:'이미지 주소를 찾지 못했어. 수집기 응답 형식 또는 게시물 접근 제한을 확인해 줘.'},422);
